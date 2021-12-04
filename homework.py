@@ -30,7 +30,7 @@ class InfoMessage:
         self.speed = speed
         self.calories = calories
 
-    def show(self) -> str:
+    def get_message(self) -> str:
         duration = self.value_format(self.duration)
         distance = self.value_format(self.distance)
         speed = self.value_format(self.speed)
@@ -52,17 +52,16 @@ class Training:
     """Базовый класс тренировки."""
 
     # Количество совершённых действий.
-    action: int
+    action: int = 0
 
     # Длительность тренировки в часах.
-    duration: float
+    duration: float = 0
 
     # Вес спортсмена в кг.
-    weight: float
+    weight: float = 0
 
-    # Расстояние в метрах, которое спортсмен преодолевает
-    # за один шаг или гребок.
-    LEN_STEP: float
+    # Расстояние в метрах, которое спортсмен преодолевает за один шаг.
+    LEN_STEP: float = 0.65
 
     # Метров в километре.
     M_IN_KM: int = 1000
@@ -113,8 +112,6 @@ class Running(Training):
                  duration: float,
                  weight: float,
                  ) -> None:
-        self.LEN_STEP = 0.65
-
         super().__init__(action, duration, weight)
 
     def get_spent_calories(self) -> float:
@@ -133,7 +130,7 @@ class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
 
     # Рост спортсмена в метрах.
-    height: int
+    height: int = 0
 
     def __init__(self,
                  action: int,
@@ -142,7 +139,6 @@ class SportsWalking(Training):
                  height: int
                  ) -> None:
         self.height = height
-        self.LEN_STEP = 0.65
 
         super().__init__(action, duration, weight)
 
@@ -163,10 +159,13 @@ class Swimming(Training):
     """Тренировка: плавание."""
 
     # Длина бассейна в метрах.
-    length_pool: int
+    length_pool: int = 0
 
     # Сколько раз пользователь переплыл бассейн.
-    count_pool: int
+    count_pool: int = 0
+
+    # Расстояние в метрах, которое спортсмен преодолевает за один гребок.
+    LEN_STEP: float = 1.38
 
     def __init__(self,
                  action: int,
@@ -177,7 +176,6 @@ class Swimming(Training):
                  ) -> None:
         self.length_pool = length_pool
         self.count_pool = count_pool
-        self.LEN_STEP = 1.38
 
         super().__init__(action, duration, weight)
 
@@ -211,9 +209,9 @@ def read_package(workout_type: str, data: list) -> Training:
 def main(training: Training) -> None:
     """Главная функция."""
     info = training.show_training_info()
-    result = info.show()
+    message = info.get_message()
 
-    print(result)
+    print(message)
 
 
 if __name__ == '__main__':
